@@ -1,53 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spin the Wheel</title>
-<style>
-  body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-  #wheel { width: 300px; height: 300px; margin: 20px auto; border-radius: 50%; border: 5px solid #333; position: relative; overflow: hidden; }
-  .segment { position: absolute; width: 50%; height: 50%; background: lightblue; transform-origin: 100% 100%; }
-  button { padding: 10px 20px; font-size: 16px; margin-top: 20px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spin the Wheel</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 40px; }
+    h2 { margin-bottom: 20px; }
+    input { padding: 8px; margin: 5px; width: 250px; }
+    button { padding: 10px 20px; font-size: 16px; margin-top: 20px; cursor: pointer; }
+    #wheel {
+      width: 300px; height: 300px; margin: 20px auto;
+      border-radius: 50%; border: 6px solid #333;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; background: conic-gradient(
+        #ff9999 0deg 72deg,
+        #99ccff 72deg 144deg,
+        #99ff99 144deg 216deg,
+        #ffff99 216deg 288deg,
+        #ffcc99 288deg 360deg
+      );
+      transition: transform 3s ease-out;
+    }
+    #pointer {
+      width: 0; height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid red;
+      margin: 0 auto;
+    }
+    #result { margin-top: 20px; font-size: 20px; font-weight: bold; }
+  </style>
 </head>
 <body>
 
-<h2>Enter your name to spin the wheel!</h2>
-<input type="text" id="username" placeholder="Your name" required>
-<div id="wheel"></div>
-<button onclick="spinWheel()">Spin!</button>
-<h3 id="result"></h3>
+  <h2>🎉 Enter your details and spin the wheel! 🎉</h2>
+  <input type="text" id="username" placeholder="Your name" required><br>
+  <input type="email" id="email" placeholder="Your email" required><br>
+  <div id="pointer"></div>
+  <div id="wheel">SPIN</div>
+  <button onclick="spinWheel()">Spin!</button>
 
-<script>
-  const segments = ["Prize 1", "Prize 2", "Prize 3", "Prize 4", "Prize 5"];
-  const wheel = document.getElementById("wheel");
-  const result = document.getElementById("result");
+  <h3 id="result"></h3>
 
-  // Create wheel segments
-  segments.forEach((text, i) => {
-    const seg = document.createElement("div");
-    seg.className = "segment";
-    seg.style.transform = `rotate(${i * (360/segments.length)}deg) skewY(-60deg)`;
-    seg.textContent = text;
-    wheel.appendChild(seg);
-  });
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  function spinWheel() {
-    const name = document.getElementById("username").value.trim();
-    if(!name) { alert("Please enter your name!"); return; }
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDdxc2Vh_XcrvKPka4A-xe5D_Ypnk4K5iI",
+    authDomain: "eestec-wheel-spin.firebaseapp.com",
+    projectId: "eestec-wheel-spin",
+    storageBucket: "eestec-wheel-spin.firebasestorage.app",
+    messagingSenderId: "256260492135",
+    appId: "1:256260492135:web:90790b7e6e5355fcdcfdc2"
+  };
 
-    const randDegree = Math.floor(Math.random() * 360);
-    wheel.style.transition = "transform 3s ease-out";
-    wheel.style.transform = `rotate(${randDegree + 720}deg)`; // 720 = 2 spins
-
-    // Determine result after animation
-    setTimeout(() => {
-      const segmentIndex = Math.floor(((360 - (randDegree % 360)) / (360 / segments.length)) % segments.length);
-      result.textContent = `${name}, you won: ${segments[segmentIndex]}!`;
-    }, 3000);
-  }
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
 </script>
 
-</body>
-</html>
+  <script type="module">
+    // After pasting your Firebase snippet, you'll already have:
+    //   const app = initializeApp(firebaseConfig);
+    //   const db = getFirestore(app);
+
+    // If those exist, you can add the following game logic below ⬇️
+
+    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const wheel = document.getElementById("wheel");
+    const resultEl = document.getElementById("result");
+    const prizes = ["Free Coffee", "Sticker", "T-Shirt", "Extra Point", "Nothing 😅"];
+    let spinning = false;
+
+    async function spinWheel() {
+      if (spinning) return; // prevent double clicks
+      const name = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      if (!name || !email) {
+        alert("Please enter both your name and email!");
+        return;
+      }
+
+      spinning = true;
+
+      // Random spin rotation
+      const randDeg = Math.floor(720 + Math.random() * 360); // at least 2 spins
+      whee
+
+
+
+
