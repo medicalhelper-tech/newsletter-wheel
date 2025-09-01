@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spin the Wheel</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+  #wheel { width: 300px; height: 300px; margin: 20px auto; border-radius: 50%; border: 5px solid #333; position: relative; overflow: hidden; }
+  .segment { position: absolute; width: 50%; height: 50%; background: lightblue; transform-origin: 100% 100%; }
+  button { padding: 10px 20px; font-size: 16px; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<h2>Enter your name to spin the wheel!</h2>
+<input type="text" id="username" placeholder="Your name" required>
+<div id="wheel"></div>
+<button onclick="spinWheel()">Spin!</button>
+<h3 id="result"></h3>
+
+<script>
+  const segments = ["Prize 1", "Prize 2", "Prize 3", "Prize 4", "Prize 5"];
+  const wheel = document.getElementById("wheel");
+  const result = document.getElementById("result");
+
+  // Create wheel segments
+  segments.forEach((text, i) => {
+    const seg = document.createElement("div");
+    seg.className = "segment";
+    seg.style.transform = `rotate(${i * (360/segments.length)}deg) skewY(-60deg)`;
+    seg.textContent = text;
+    wheel.appendChild(seg);
+  });
+
+  function spinWheel() {
+    const name = document.getElementById("username").value.trim();
+    if(!name) { alert("Please enter your name!"); return; }
+
+    const randDegree = Math.floor(Math.random() * 360);
+    wheel.style.transition = "transform 3s ease-out";
+    wheel.style.transform = `rotate(${randDegree + 720}deg)`; // 720 = 2 spins
+
+    // Determine result after animation
+    setTimeout(() => {
+      const segmentIndex = Math.floor(((360 - (randDegree % 360)) / (360 / segments.length)) % segments.length);
+      result.textContent = `${name}, you won: ${segments[segmentIndex]}!`;
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>
